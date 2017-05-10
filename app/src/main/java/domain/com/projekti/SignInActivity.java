@@ -15,60 +15,70 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 
-public class SignInActivity extends Base_Activity implements TAGS{
+public class SignInActivity extends Base_Activity implements TAGS
+{
     private EditText et_uname, et_pword;
-    //private String TAG_ID = "ID",
-    //        TAG_NAME = "Name",
-    //        TAG_LOGGED = "LogStatus",
-    //        TAG_PASSWORD = "Password";
     private String uname, pword,jsonData;
     private User currentUser;
     private MyASyncHandler myASyncHandler;
 
-
-
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_in);
         Init();
     }
 
-    private void Init() {
+    private void Init()
+    {
         et_uname = (EditText) findViewById(R.id.si_et_uname);
         et_pword = (EditText) findViewById(R.id.si_et_pword);
         currentUser = new User();
     }
 
-    public void tryLogin(View v) {
+    public void tryLogin(View v)
+    {
         uname = et_uname.getText().toString();
         pword = et_pword.getText().toString();
         String urlAddress = "https://codez.savonia.fi/jukka/project/user.php?Name="+uname+"&Password="+pword;
         myASyncHandler = new MyASyncHandler(true,this);
-        try{
+        try
+        {
             jsonData=myASyncHandler.execute("1",urlAddress).get();
-            if(TextUtils.isEmpty(jsonData)){
+            if(TextUtils.isEmpty(jsonData))
+            {
                 Toast.makeText(this, "Incorrect username or password!", Toast.LENGTH_SHORT).show();
-            }else{
+            }
+            else
+            {
                 currentUser = ParseJSON(jsonData);
-                if(currentUser!=null){
+                if(currentUser!=null)
+                {
                     saveCredentials();
                     Toast.makeText(this, "Logged in!", Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent(this,MainActivity.class);
                     startActivity(intent);
                     finish();
-                }else{
+                }
+                else
+                {
                     Toast.makeText(this, "Incorrect username or password!", Toast.LENGTH_SHORT).show();
                 }
             }
-        }catch(Exception e){
+        }
+        catch(Exception e)
+        {
             Toast.makeText(this, "Something went wrong!", Toast.LENGTH_SHORT).show();
         }
     }
 
-    private User ParseJSON(String json) {
-        if (json != null) {
-            try {
+    private User ParseJSON(String json)
+    {
+        if (json != null)
+        {
+            try
+            {
 
                 JSONArray jsonArray  = new JSONArray(json);
                 Log.d("JSON to list: ", "> " + json);
@@ -84,16 +94,21 @@ public class SignInActivity extends Base_Activity implements TAGS{
                 user.Name = name;
                 user.Password = password;
                 return user;
-            } catch (JSONException e) {
+            }
+            catch (JSONException e)
+            {
                 e.printStackTrace();
                 return null;
             }
-        } else {
+        }
+        else
+        {
             Log.e("ServiceHandler", "No data received from HTTP Request");
             return null;
         }
     }
-    private void saveCredentials(){
+    private void saveCredentials()
+    {
         SharedPreferences loginCredentials = getSharedPreferences("domain.com.projekti.PREFERENCE_FILE_KEY", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = loginCredentials.edit();
         editor.putString(TAG_NAME,currentUser.Name);

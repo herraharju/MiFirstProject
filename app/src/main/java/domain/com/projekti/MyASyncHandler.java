@@ -19,19 +19,24 @@ import okhttp3.Request;
  * Created by MrKohvi on 12.4.2017.
  */
 
-public class MyASyncHandler extends AsyncTask<String,Void,String> {
-    public MyASyncHandler(boolean showProgressDialog,Context activityContext){
+public class MyASyncHandler extends AsyncTask<String,Void,String>
+{
+    public MyASyncHandler(boolean showProgressDialog,Context activityContext)
+    {
         super();
         this.showLoading = showProgressDialog;
         this.context = activityContext;
     }
+
     private boolean showLoading;
     private ProgressDialog proDialog;
     private Context context;
     @Override
-    protected void onPreExecute() {
+    protected void onPreExecute()
+    {
         super.onPreExecute();
-        if(showLoading){
+        if(showLoading)
+        {
            // Showing progress loading dialog
             proDialog = new ProgressDialog(context);
             proDialog.setMessage("Please wait…");
@@ -40,21 +45,31 @@ public class MyASyncHandler extends AsyncTask<String,Void,String> {
         }
     }
     @Override
-    protected String doInBackground(String... params) {
+    protected String doInBackground(String... params)
+    {
         String ret="";
-        if(params[0].equals("0")) {//execute url and send data to server
-            try {
+        if(params[0].equals("0"))
+        {
+            //execute url and send data to server
+            try
+            {
                 URL url = new URL(params[1]);
                 OkHttpClient client = new OkHttpClient();
                 Request request = new Request.Builder().url(url).build();
                 client.newCall(request).execute();
-            } catch (Exception e) {
+            }
+            catch (Exception e)
+            {
                 Log.d("Response: ", "> " + e.getMessage());
             }
             ret= "Account created succesfully!";
-        }else if(params[0].equals("1")){//execute url and receive return JSON value from server
+        }
+        else if(params[0].equals("1"))
+        {
+            //execute url and receive return JSON value from server
             HttpURLConnection urlConnection=null;
-            try{
+            try
+            {
                 URL url = new URL(params[1]);
                 urlConnection = (HttpURLConnection) url.openConnection();
                 InputStream stream = new BufferedInputStream(urlConnection.getInputStream());
@@ -62,17 +77,21 @@ public class MyASyncHandler extends AsyncTask<String,Void,String> {
                 StringBuilder builder = new StringBuilder();
 
                 String inputString;
-                while ((inputString = bufferedReader.readLine()) != null) {
+                while ((inputString = bufferedReader.readLine()) != null)
+                {
                     builder.append(inputString);
                 }
                 Log.d("Response: ", "> " + builder.toString());
-
                 ret = builder.toString();
-
-            }catch(Exception e){
+            }
+            catch(Exception e)
+            {
                 Log.d("Response: ", "> " + e.getMessage());
-            }finally{
-                if(urlConnection!=null){
+            }
+            finally
+            {
+                if(urlConnection!=null)
+                {
                     urlConnection.disconnect();
                 }
             }
@@ -80,16 +99,17 @@ public class MyASyncHandler extends AsyncTask<String,Void,String> {
         return ret;
     }
     @Override
-    protected void onPostExecute(String requestresult) {
+    protected void onPostExecute(String requestresult)
+    {
         //Dismiss progress dialog
         super.onPostExecute(requestresult);
-        if(showLoading){
-            if (proDialog.isShowing()){
+        if(showLoading)
+        {
+            if (proDialog.isShowing())
+            {
                 proDialog.dismiss();
             }
         }
-
     }
-
 }
 

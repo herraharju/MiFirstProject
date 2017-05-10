@@ -4,7 +4,8 @@ package domain.com.projekti;
  * Created by MrKohvi on 10.5.2017.
  */
 
-public interface TAGS {
+public interface TAGS
+{
     String  TAG_LOGGED = "LogStatus",
             TAG_USER_ID_TASK = "UserID",
             TAG_ID="ID",

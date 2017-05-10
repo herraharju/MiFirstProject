@@ -4,7 +4,8 @@ package domain.com.projekti;
  * Created by MrKohvi on 14.4.2017.
  */
 
-public class Task {
+public class Task
+{
     public int ID;
     public int UserID;
     public String Start;
