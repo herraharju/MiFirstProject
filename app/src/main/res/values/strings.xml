@@ -1,0 +1,161 @@
+<resources>
+    <!--action bar-->
+    <string name="app_name">Project</string>
+    <string name="app_reg">Register</string>
+    <string name="app_del_user">Delete user</string>
+    <string name="app_login">Login</string>
+    <string name="app_home">Home</string>
+    <string name="app_logout">Logout</string>
+    <string name="app_details">Edit password</string>
+    <!--"Globals"-->
+    <string name="uname">Username</string>
+    <string name="pword">Password</string>
+    <string name="desc">Description</string>
+    <!--MainActivity-->
+    <string name="logged_as">Logged as: </string>
+    <string name="tip_free">Green color - Free task</string>
+    <string name="tip_reserved">Yellow color - Reserved task</string>
+    <string name="tip_started">Cyan color - Started task</string>
+    <string name="tip_stopped">Grey color - Stopped/Finished task</string>
+    <string name="btn_sign_in">Sign In</string>
+    <string name="title">Welcome!</string>
+    <string name="image_string">defaultImage</string>
+    <!--SignUpActivity-->
+    <string name="cpword">Confirm password</string>
+    <string name="hint_cpword">Give your password again</string>
+    <string name="hint_pword">Give password</string>
+    <string name="hint_uname">Give username</string>
+    <string name="hint_desc">Write something about yourself here</string>
+
+    <string name="button">Create Account</string>
+    <!--SignInActivity-->
+    <!--EditUserActivity-->
+    <string name="editBtn">Edit Account</string>
+    <string name="hint_edit_cpword">Give your new password again</string>
+    <string name="hint_edit_pword">Give new password</string>
+    <string name="edit_cpword">Confirm new password</string>
+    <string name="edit_pword">New password</string>
+    <string name="hint_edit_desc">Edit your description here</string>
+    <string name="no_tasks">You have no tasks!</string>
+    <string name="new_task">New Task</string>
+    <!--Pop up menu task-->
+    <string name="task_delete">Delete</string>
+    <string name="task_reserve">Reserve</string>
+    <string name="task_start">Start</string>
+    <string name="task_stop">Stop</string>
+    <!-- Maps activity-->
+    <string name="title_activity_maps">Map</string>
+    <!-- NewTaskActivity-->
+    <string name="task_desc">Task description</string>
+    <string name="task_place">Place</string>
+    <string name="task_loc">Location</string>
+    <string name="task_lat">Latitude: </string>
+    <string name="task_lon">Longitude: </string>
+    <string name="task_hint_desc">Write some information about task here</string>
+    <string name="task_hint_place">Give information about task\'s place</string>
+    <string name="task_get_loc_map">Select location</string>
+    <string name="task_create">Create new task!</string>
+    <string name="search_location_here">Search Location Here</string>
+    <string name="search">Search</string>
+    <string name="task_address">Address:</string>
+    <string name="title_activity_settings">Settings</string>
+
+    <!-- Strings related to Settings -->
+
+    <!-- Example General settings -->
+    <string name="pref_header_general">General</string>
+
+    <string name="pref_title_social_recommendations">Enable social recommendations</string>
+    <string name="pref_description_social_recommendations">Recommendations for people to contact
+        based on your message history
+    </string>
+
+    <string name="pref_title_display_name">Display name</string>
+    <string name="pref_default_display_name">John Smith</string>
+
+    <string name="pref_title_add_friends_to_messages">Add friends to messages</string>
+    <string-array name="pref_example_list_titles">
+        <item>Always</item>
+        <item>When possible</item>
+        <item>Never</item>
+    </string-array>
+    <string-array name="pref_example_list_values">
+        <item>1</item>
+        <item>0</item>
+        <item>-1</item>
+    </string-array>
+
+    <!-- Example settings for Data & Sync -->
+    <string name="pref_header_data_sync">Data &amp; sync</string>
+
+    <string name="pref_title_sync_frequency">Sync frequency</string>
+    <string-array name="pref_sync_frequency_titles">
+        <item>1 minute</item>
+        <item>2 minutes</item>
+        <item>5 minutes</item>
+        <item>15 minutes</item>
+        <item>30 minutes</item>
+        <item>1 hour</item>
+    </string-array>
+    <string-array name="pref_sync_frequency_values">
+        <item>60000</item>
+        <item>120000</item>
+        <item>300000</item>
+        <item>900000</item>
+        <item>1800000</item>
+        <item>3600000</item>
+    </string-array>
+    <string name="pref_title_distance_alert">Task alert distance</string>
+    <string-array name="pref_distance_alert_titles">
+        <item>100 m</item>
+        <item>250 m</item>
+        <item>500 m</item>
+        <item>1 km</item>
+        <item>2 km</item>
+        <item>5 km</item>
+    </string-array>
+    <string-array name="pref_distance_alert_values">
+        <item>100</item>
+        <item>250</item>
+        <item>500</item>
+        <item>1000</item>
+        <item>2000</item>
+        <item>5000</item>
+    </string-array>
+    <string-array name="list_preference_entries">
+        <item>Entry 1</item>
+        <item>Entry 2</item>
+        <item>Entry 3</item>
+    </string-array>
+
+    <string-array name="list_preference_entry_values">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+    </string-array>
+
+    <string-array name="multi_select_list_preference_default_value" />
+
+    <string name="pref_title_system_sync_settings">System sync settings</string>
+
+    <!-- Example settings for Notifications -->
+    <string name="pref_header_notifications">Notifications</string>
+
+    <string name="pref_title_new_message_notifications">New message notifications</string>
+
+    <string name="pref_title_ringtone">Ringtone</string>
+    <string name="pref_ringtone_silent">Silent</string>
+
+    <string name="pref_title_vibrate">Vibrate</string>
+    <string name="tip_scroll">Scroll to reveal more tasks!</string>
+    <string name="tv_tasks_header">Tasks</string>
+    <string name="old_pword">Current password</string>
+    <string name="et_old_pword">Give current password</string>
+    <string name="pref_button_title_edit_acc">Edit your account</string>
+    <string name="pref_edit_btn">edit_btn</string>
+    <string name="pref_delete_btn">delete_btn</string>
+    <string name="pref_button_title_delete_acc">Delete your account</string>
+    <string name="du_tv_header">Delete current account</string>
+    <string name="ab_settings">Settings</string>
+
+</resources>

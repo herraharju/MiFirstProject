@@ -1,0 +1,12 @@
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+   <Preference
+       android:title="@string/pref_button_title_edit_acc"
+       android:key="@string/pref_edit_btn"
+       android:summary="Change password and user description"/>
+    <Preference
+        android:title="@string/pref_button_title_delete_acc"
+        android:key="@string/pref_delete_btn"
+        android:summary="Delete your user for good"/>
+
+</PreferenceScreen>

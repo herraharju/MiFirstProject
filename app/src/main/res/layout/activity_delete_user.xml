@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="domain.com.projekti.DeleteUserActivity"
+    android:orientation="vertical"
+    android:weightSum="1">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.8"
+        android:orientation="vertical">
+    <TextView
+        android:id="@+id/du_tv_header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/du_tv_header"
+        android:textAlignment="center"
+        android:textColor="@color/cast_expanded_controller_background_color"
+        android:textSize="30sp"
+        android:paddingBottom="20dp"/>
+
+    <TextView
+        android:id="@+id/du_tv_old_pword"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/old_pword"
+        android:textColor="@color/cast_expanded_controller_background_color"
+        android:textSize="24sp" />
+
+    <EditText
+        android:id="@+id/du_et_old_pword"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="@string/et_old_pword"
+        android:inputType="textPassword" />
+
+    <TextView
+        android:id="@+id/du_tv_cpword"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/cpword"
+        android:textColor="@color/cast_expanded_controller_background_color"
+        android:textSize="24sp" />
+        <EditText
+            android:id="@+id/du_et_cpword"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="@string/hint_cpword"
+            android:inputType="textPassword" />
+    </LinearLayout>
+
+
+    <Button
+        android:id="@+id/du_del_btn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.2"
+        android:text="@string/du_tv_header" />
+</LinearLayout>

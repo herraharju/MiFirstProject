@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/ab_register"
+        android:icon="@mipmap/ic_reg"
+        android:title="@string/app_reg"
+        android:orderInCategory="2"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/ab_login"
+        android:icon="@mipmap/ic_login"
+        android:title="@string/app_login"
+        android:orderInCategory="3"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/ab_home"
+        android:icon="@mipmap/ic_home"
+        android:title="@string/app_home"
+        android:orderInCategory="1"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/ab_logout"
+        android:icon="@mipmap/ic_logout"
+        android:title="@string/app_logout"
+        android:orderInCategory="8"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/ab_new_task"
+        android:icon="@mipmap/ic_new_task"
+        android:orderInCategory="7"
+        android:title="@string/new_task"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/ab_settings"
+        android:icon="@mipmap/ic_settings"
+        android:orderInCategory="6"
+        android:title="@string/ab_settings"
+        app:showAsAction="always" />
+</menu>

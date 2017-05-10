@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <color name="colorPrimary">#3F51B5</color>
+    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorAccent">#ff4081</color>
+
+    <color type="color" name="TURQOISE">#00CED1</color>
+    <color type="color" name="YELLOW">#FFFF00</color>
+    <color type="color" name="GREEN">#19FF19</color>
+    <color type="color" name="GRAY">#808080</color>
+</resources>
