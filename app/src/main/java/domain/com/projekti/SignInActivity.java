@@ -15,12 +15,12 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 
-public class SignInActivity extends Base_Activity {
+public class SignInActivity extends Base_Activity implements TAGS{
     private EditText et_uname, et_pword;
-    private String TAG_ID = "ID",
-            TAG_NAME = "Name",
-            TAG_LOGGED = "LogStatus",
-            TAG_PASSWORD = "Password";
+    //private String TAG_ID = "ID",
+    //        TAG_NAME = "Name",
+    //        TAG_LOGGED = "LogStatus",
+    //        TAG_PASSWORD = "Password";
     private String uname, pword,jsonData;
     private User currentUser;
     private MyASyncHandler myASyncHandler;
@@ -76,7 +76,7 @@ public class SignInActivity extends Base_Activity {
                 JSONObject jsonObj = jsonArray.getJSONObject(0);
                 String id = jsonObj.getString(TAG_ID);
                 String name = jsonObj.getString(TAG_NAME);
-                String password = jsonObj.getString(TAG_PASSWORD);
+                String password = jsonObj.getString(TAG_PWORD);
 
                 User user = new User();
 
@@ -97,7 +97,7 @@ public class SignInActivity extends Base_Activity {
         SharedPreferences loginCredentials = getSharedPreferences("domain.com.projekti.PREFERENCE_FILE_KEY", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = loginCredentials.edit();
         editor.putString(TAG_NAME,currentUser.Name);
-        editor.putString(TAG_PASSWORD,currentUser.Password);
+        editor.putString(TAG_PWORD,currentUser.Password);
         editor.putInt(TAG_ID,currentUser.ID);
         editor.putBoolean(TAG_LOGGED,true);
         editor.commit();

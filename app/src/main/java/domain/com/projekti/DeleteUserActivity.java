@@ -13,10 +13,13 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-public class DeleteUserActivity extends AppCompatActivity implements View.OnClickListener{
-    private String TAG_LOGGED = "LogStatus",
-            TAG_ID = "ID",
-            TAG_PWORD="Password";
+public class DeleteUserActivity extends AppCompatActivity implements
+        View.OnClickListener,
+        TAGS
+{
+    //private String TAG_LOGGED = "LogStatus",
+    //        TAG_ID = "ID",
+    //        TAG_PWORD="Password";
     private SharedPreferences loginCredentials;
     private EditText et_pword,et_cpword;
     private Button del_btn;

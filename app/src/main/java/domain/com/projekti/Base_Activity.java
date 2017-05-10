@@ -19,9 +19,9 @@ import android.widget.Toast;
  * Created by MrKohvi on 10.4.2017.
  */
 
-public class Base_Activity extends AppCompatActivity {
-    private String TAG_LOGGED = "LogStatus",
-                   TAG_ID = "ID";
+public class Base_Activity extends AppCompatActivity implements TAGS{
+    //private String TAG_LOGGED = "LogStatus",
+    //               TAG_ID = "ID";
     private SharedPreferences loginCredentials;
     private MenuItem loginBtn,registerBtn,logoutBtn,newTaskBtn;
     @Override

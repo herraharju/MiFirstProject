@@ -27,20 +27,20 @@ import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
 
 
-public class MainActivity extends Base_Activity {
-     String TAG_LOGGED = "LogStatus",
-                   TAG_USER_ID_TASK = "UserID",
-                   TAG_USER_ID = "ID",
-                   TAG_TASK_ID="ID",
-                   TAG_LON="Lon",
-                   TAG_LAT="Lat",
-                   TAG_NAME = "Name",
-                   TAG_PASSWORD = "Password",
-            TAG_START = "Start",
-            TAG_STOP = "Stop",
-            TAG_EXPLANATION = "Explanation",
-            TAG_DESCRIPTION = "Description",
-            TAG_PLACE = "Place";
+public class MainActivity extends Base_Activity implements TAGS {
+     //String TAG_LOGGED = "LogStatus",
+     //       TAG_USER_ID_TASK = "UserID",
+     //       TAG_USER_ID = "ID",
+     //       TAG_TASK_ID="ID",
+     //       TAG_LON="Lon",
+     //       TAG_LAT="Lat",
+     //       TAG_NAME = "Name",
+     //       TAG_PASSWORD = "Password",
+     //       TAG_START = "Start",
+     //       TAG_STOP = "Stop",
+     //       TAG_EXPLANATION = "Explanation",
+     //       TAG_DESCRIPTION = "Description",
+     //       TAG_PLACE = "Place";
     private String urlAddress;
     private TextView tv_logged,tv_loggedAs;
     private ListView listView;
@@ -79,7 +79,7 @@ public class MainActivity extends Base_Activity {
             SharedPreferences sharedPrefs = PreferenceManager
                     .getDefaultSharedPreferences(this);
             tv_loggedAs.setText(sharedPrefs.getString("sync_frequency",""));
-            userId=loginCredentials.getInt(TAG_USER_ID,-1);
+            userId=loginCredentials.getInt(TAG_ID,-1);
             //set listview before setting it visible
             getTasks();
             //get user tasks and set layout components
@@ -105,7 +105,7 @@ public class MainActivity extends Base_Activity {
 
                     JSONObject jsonObj = jsonArray.getJSONObject(i);
 
-                    String id = jsonObj.getString(TAG_TASK_ID);
+                    String id = jsonObj.getString(TAGS.TAG_ID);
                     String userid_task = jsonObj.getString(TAG_USER_ID_TASK);
                     String start = jsonObj.getString(TAG_START);
                     String stop = jsonObj.getString(TAG_STOP);

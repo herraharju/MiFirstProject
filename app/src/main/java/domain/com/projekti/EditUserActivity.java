@@ -13,13 +13,13 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-public class EditUserActivity extends AppCompatActivity {
+public class EditUserActivity extends AppCompatActivity implements TAGS {
 
     private EditText et_pword,et_cpword,et_desc,et_old_pword;
     private String pword,cpword,desc,old_pword;
-    private String
-            TAG_ID="ID",
-            TAG_PWORD="Password";
+    //private String
+    //        TAG_ID="ID",
+    //        TAG_PWORD="Password";
     private Button btn_editDetails;
     private Context context;
     private SharedPreferences loginCredentials;
