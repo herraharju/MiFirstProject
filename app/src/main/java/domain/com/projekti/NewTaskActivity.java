@@ -118,7 +118,6 @@ public class NewTaskActivity
                     {
                         Intent backToMain = new Intent(this,MainActivity.class);
                         startActivity(backToMain);
-
                         finish();
                     }
                 }

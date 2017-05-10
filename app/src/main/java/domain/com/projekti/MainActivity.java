@@ -3,6 +3,8 @@ package domain.com.projekti;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.CountDownTimer;
+import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.ContextMenu;
@@ -15,6 +17,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -23,13 +26,14 @@ import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
 
 
+
 public class MainActivity extends Base_Activity implements TAGS
 {
-    private String urlAddress;
-    private TextView tv_logged,tv_loggedAs;
+    private String m_urlAddress;
+    private TextView m_tv_logged, m_tv_loggedAs;
     private ListView listView;
     private MyAdapter adapter;
-    private SharedPreferences loginCredentials;
+    private SharedPreferences loginCredentials,settings;
     private int userId;
     private ArrayList<Task> tasks;
     private LinearLayout layoutLoggedOut,layoutLoggedIn,layoutTips;
@@ -41,11 +45,12 @@ public class MainActivity extends Base_Activity implements TAGS
         setContentView(R.layout.activity_main);
         Init();
         checkIfLoggedIn();
+        countDownTimer();
     }
     public void Init()
     {
-        tv_logged=(TextView)findViewById(R.id.main_tv_no_tasks);
-        tv_loggedAs = (TextView)findViewById(R.id.main_tv_login_info);
+        m_tv_logged =(TextView)findViewById(R.id.main_tv_no_tasks);
+        m_tv_loggedAs = (TextView)findViewById(R.id.main_tv_login_info);
         listView = (ListView) findViewById(R.id.myListView);
         registerForContextMenu(listView);
         listView.setLongClickable(true);
@@ -54,21 +59,20 @@ public class MainActivity extends Base_Activity implements TAGS
         layoutLoggedIn = (LinearLayout)findViewById(R.id.loggedIn);
         layoutTips = (LinearLayout)findViewById(R.id.tipsLayout);
         adapter=null;
-        urlAddress = "";
+        m_urlAddress = "";
+
     }
     public void checkIfLoggedIn()
     {
         loginCredentials = getSharedPreferences("domain.com.projekti.PREFERENCE_FILE_KEY", Context.MODE_PRIVATE);
+        settings = PreferenceManager.getDefaultSharedPreferences(this);
+
         if(loginCredentials.getBoolean(TAG_LOGGED,false))
         {
             //if logged in
-            tv_loggedAs.setText("Logged as: "+loginCredentials.getString(TAG_NAME,""));
+            m_tv_loggedAs.setText("Logged as: "+loginCredentials.getString(TAG_NAME,""));
 
             //get user id
-            SharedPreferences sharedPrefs = PreferenceManager
-                    .getDefaultSharedPreferences(this);
-
-            tv_loggedAs.setText(sharedPrefs.getString("sync_frequency",""));
             userId=loginCredentials.getInt(TAG_ID,-1);
 
             //set listview before setting it visible
@@ -78,7 +82,6 @@ public class MainActivity extends Base_Activity implements TAGS
             layoutLoggedIn.setVisibility(View.VISIBLE);
             layoutLoggedOut.setVisibility(View.GONE);
             layoutTips.setVisibility(View.VISIBLE);
-
         }
         else
         {//if not logged in
@@ -169,7 +172,7 @@ public class MainActivity extends Base_Activity implements TAGS
     {
         AdapterContextMenuInfo info = (AdapterContextMenuInfo)item.getMenuInfo();
         int index = info.position;
-        urlAddress = "";
+        m_urlAddress = "";
         String desc = tasks.get(index).Description;
         int id = tasks.get(index).ID;
 
@@ -177,11 +180,11 @@ public class MainActivity extends Base_Activity implements TAGS
         {
             case R.id.task_delete:
                 Toast.makeText(getApplicationContext(), "Delete "+desc, Toast.LENGTH_SHORT).show();
-                urlAddress = "https://codez.savonia.fi/jukka/project/deletetask.php?Id="+id;
+                m_urlAddress = "https://codez.savonia.fi/jukka/project/deletetask.php?Id="+id;
 
                 try
                 {
-                    new MyASyncHandler(true,this).execute("1",urlAddress).get();
+                    new MyASyncHandler(true,this).execute("1",m_urlAddress).get();
                 }
                 catch (InterruptedException e)
                 {
@@ -196,10 +199,10 @@ public class MainActivity extends Base_Activity implements TAGS
                 if(tasks.get(index).UserID==0)
                 {
                     Toast.makeText(getApplicationContext(), "Reserve "+desc, Toast.LENGTH_SHORT).show();
-                    urlAddress = "https://codez.savonia.fi/jukka/project/reservetask.php?Id="+id+"&UserId="+userId;
+                    m_urlAddress = "https://codez.savonia.fi/jukka/project/reservetask.php?Id="+id+"&UserId="+userId;
                     try
                     {
-                        new MyASyncHandler(true,this).execute("1",urlAddress).get();
+                        new MyASyncHandler(true,this).execute("1",m_urlAddress).get();
                     }
                     catch (InterruptedException e)
                     {
@@ -219,10 +222,10 @@ public class MainActivity extends Base_Activity implements TAGS
                 if(tasks.get(index).Start.equals("null")&& tasks.get(index).Stop.equals("null"))
                 {
                     Toast.makeText(getApplicationContext(), "Start "+desc, Toast.LENGTH_SHORT).show();
-                    urlAddress = "https://codez.savonia.fi/jukka/project/starttask.php?Id="+id;
+                    m_urlAddress = "https://codez.savonia.fi/jukka/project/starttask.php?Id="+id;
                     try
                     {
-                        new MyASyncHandler(true,this).execute("1",urlAddress).get();
+                        new MyASyncHandler(true,this).execute("1",m_urlAddress).get();
                     }
                     catch (InterruptedException e)
                     {
@@ -254,10 +257,10 @@ public class MainActivity extends Base_Activity implements TAGS
                 else if(!(tasks.get(index).Start.equals("null"))&&(tasks.get(index).Stop.equals("null")))
                 {
                     Toast.makeText(getApplicationContext(), "Stop "+desc, Toast.LENGTH_SHORT).show();
-                    urlAddress = "https://codez.savonia.fi/jukka/project/stoptask.php?Id="+id+"&Explanation=Stopped";
+                    m_urlAddress = "https://codez.savonia.fi/jukka/project/stoptask.php?Id="+id+"&Explanation=Stopped";
                     try
                     {
-                        new MyASyncHandler(true,this).execute("1",urlAddress).get();
+                        new MyASyncHandler(true,this).execute("1",m_urlAddress).get();
                     }
                     catch (InterruptedException e)
                     {
@@ -284,20 +287,20 @@ public class MainActivity extends Base_Activity implements TAGS
     {
         try
         {
-            urlAddress= "https://codez.savonia.fi/jukka/project/UserAndFreeTasks.php?UserID="+userId;
-            String json_tasks = new MyASyncHandler(true,this).execute("1",urlAddress).get();
-            if(!(json_tasks.equals("[]") || json_tasks.isEmpty()))
+            m_urlAddress= "https://codez.savonia.fi/jukka/project/UserAndFreeTasks.php?UserID="+userId;
+            String json_tasks = new MyASyncHandler(true,this).execute("1",m_urlAddress).get();
+            if(!(json_tasks.equals("[]")) || !(json_tasks.isEmpty()))
             {
                 tasks=ParseJSON(json_tasks);
                 adapter = new MyAdapter(MainActivity.this,tasks,userId);
                 listView.setAdapter(adapter);
                 listView.setVisibility(View.VISIBLE);
-                tv_logged.setVisibility(View.GONE);
+                m_tv_logged.setVisibility(View.GONE);
             }
             else
             {
                 listView.setVisibility(View.GONE);
-                tv_logged.setVisibility(View.VISIBLE);
+                m_tv_logged.setVisibility(View.VISIBLE);
                 layoutTips.setVisibility(View.VISIBLE);
             }
         }
@@ -307,10 +310,21 @@ public class MainActivity extends Base_Activity implements TAGS
         }
     }
 
-    @Override
-    protected void onResume()
-    {
-        super.onResume();
-        checkIfLoggedIn();
-    }
+    public void countDownTimer(){
+       new CountDownTimer(Long.parseLong(settings.getString("sync_frequency","10000")),1000)
+       {
+           @Override
+           public void onTick(long millisUntilFinished)
+           {
+
+           }
+
+           @Override
+           public void onFinish()
+           {
+               getTasks();
+               countDownTimer();
+           }
+       }.start();
+   }
 }
