@@ -3,6 +3,7 @@ package domain.com.projekti;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -14,7 +15,6 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 public class DeleteUserActivity extends AppCompatActivity implements
-        View.OnClickListener,
         TAGS {
 
     private SharedPreferences loginCredentials;
@@ -70,6 +70,10 @@ public class DeleteUserActivity extends AppCompatActivity implements
                 {
                     new MyASyncHandler(false,getApplicationContext()).execute("0",urlAddress).get();
                     getSharedPreferences("domain.com.projekti.PREFERENCE_FILE_KEY", Context.MODE_PRIVATE).edit().clear().commit();
+
+                    //back to main activity
+                    Intent intent = new Intent(getApplicationContext(),MainActivity.class);
+                    startActivity(intent);
                     finish();
                 }
                 catch(Exception e)
@@ -92,14 +96,6 @@ public class DeleteUserActivity extends AppCompatActivity implements
     }
 
     @Override
-    public void onClick(View v)
-    {
-        switch (v.getId())
-        {
-            case R.id.du_del_btn:
-        }
-    }
-    @Override
     public boolean onOptionsItemSelected(MenuItem item)
     {
         switch (item.getItemId())
@@ -111,4 +107,5 @@ public class DeleteUserActivity extends AppCompatActivity implements
                 return false;
         }
     }
+
 }

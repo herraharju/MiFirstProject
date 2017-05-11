@@ -17,5 +17,10 @@ public interface TAGS
             TAG_STOP = "Stop",
             TAG_EXPLANATION = "Explanation",
             TAG_DESCRIPTION = "Description",
-            TAG_PLACE = "Place";
+            TAG_PLACE = "Place",
+            REQUESTING_LOCATION_UPDATES_KEY = "requesting-location-updates",
+            LOCATION_KEY ="location-key",
+            LAST_UPDATED_TIME_STRING_KEY = "last-updated-time-string-key";
+    int MY_PERMISSIONS_REQUEST_LOCATION = 99;
+
 }

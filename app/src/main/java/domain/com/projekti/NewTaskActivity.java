@@ -92,7 +92,7 @@ public class NewTaskActivity
                     Toast.makeText(this, "Place description or address required", Toast.LENGTH_SHORT).show();
                     check = false;
                 }
-                if(lonVal<=0.0 || latVal<=0.0)
+                if(lonVal==0.0 || latVal==0.0)
                 {
                     Toast.makeText(this, "You need to give location for task", Toast.LENGTH_SHORT).show();
                     check = false;

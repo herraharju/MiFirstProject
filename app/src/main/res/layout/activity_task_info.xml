@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="domain.com.projekti.TaskInfoActivity"
+    android:orientation="vertical">
+
+
+    <TextView
+        android:id="@+id/ti_tv_user"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/ti_username"/>
+
+    <TextView
+        android:id="@+id/ti_tv_task_desc"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/ti_task_desc"/>
+
+    <TextView
+        android:id="@+id/ti_tv_task_explanation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/ti_task_exp"/>
+
+    <TextView
+        android:id="@+id/ti_tv_task_id"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/ti_task_id"/>
+
+    <TextView
+        android:id="@+id/ti_tv_task_place"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/ti_tv_place"/>
+
+    <TextView
+        android:id="@+id/ti_tv_lat"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/ti_task_lat"/>
+
+    <TextView
+        android:id="@+id/ti_tv_lon"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/ti_task_lon"/>
+
+    <TextView
+        android:id="@+id/ti_tv_start"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/ti_start"/>
+
+</LinearLayout>
