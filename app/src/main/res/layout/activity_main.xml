@@ -88,7 +88,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/tip_scroll"
                 android:textColor="@color/cast_expanded_controller_background_color"
-                android:textSize="18sp" />
+                android:textSize="14sp"/>
 
             <TextView
                 android:id="@+id/main_tv_tip_free"

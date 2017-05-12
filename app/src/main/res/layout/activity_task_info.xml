@@ -13,48 +13,57 @@
         android:id="@+id/ti_tv_user"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/ti_username"/>
+        android:text="@string/ti_username"
+        android:textAlignment="textStart"
+        android:textColor="@color/cast_expanded_controller_background_color"/>
 
     <TextView
         android:id="@+id/ti_tv_task_desc"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/ti_task_desc"/>
+        android:text="@string/ti_task_desc"
+        android:textColor="@color/cast_expanded_controller_background_color"/>
 
     <TextView
         android:id="@+id/ti_tv_task_explanation"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/ti_task_exp"/>
+        android:text="@string/ti_task_exp"
+        android:textColor="@color/cast_expanded_controller_background_color"/>
 
     <TextView
         android:id="@+id/ti_tv_task_id"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/ti_task_id"/>
+        android:text="@string/ti_task_id"
+        android:textColor="@color/cast_expanded_controller_background_color"/>
 
     <TextView
         android:id="@+id/ti_tv_task_place"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/ti_tv_place"/>
+        android:text="@string/ti_tv_place"
+        android:textColor="@color/cast_expanded_controller_background_color"/>
 
     <TextView
         android:id="@+id/ti_tv_lat"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/ti_task_lat"/>
+        android:text="@string/ti_task_lat"
+        android:textColor="@color/cast_expanded_controller_background_color"/>
 
     <TextView
         android:id="@+id/ti_tv_lon"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/ti_task_lon"/>
+        android:text="@string/ti_task_lon"
+        android:textColor="@color/cast_expanded_controller_background_color"/>
 
     <TextView
         android:id="@+id/ti_tv_start"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/ti_start"/>
+        android:text="@string/ti_start"
+        android:textColor="@color/cast_expanded_controller_background_color"/>
 
 </LinearLayout>

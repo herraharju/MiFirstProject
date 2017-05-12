@@ -147,8 +147,8 @@
     <string name="pref_ringtone_silent">Silent</string>
 
     <string name="pref_title_vibrate">Vibrate</string>
-    <string name="tip_scroll">Scroll to reveal more tasks!</string>
-    <string name="tv_tasks_header">Tasks</string>
+    <string name="tip_scroll">Scroll to reveal more tasks\nHold long on task to get actions</string>
+    <string name="tv_tasks_header">Free and your tasks</string>
     <string name="old_pword">Current password</string>
     <string name="et_old_pword">Give current password</string>
     <string name="pref_button_title_edit_acc">Edit your account</string>
