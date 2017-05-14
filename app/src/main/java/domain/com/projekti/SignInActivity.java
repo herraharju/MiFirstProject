@@ -41,36 +41,52 @@ public class SignInActivity extends Base_Activity implements TAGS
     {
         uname = et_uname.getText().toString();
         pword = et_pword.getText().toString();
-        String urlAddress = "https://codez.savonia.fi/jukka/project/user.php?Name="+uname+"&Password="+pword;
-        myASyncHandler = new MyASyncHandler(true,this);
-        try
+        if(uname.isEmpty() || pword.isEmpty())
         {
-            jsonData=myASyncHandler.execute("1",urlAddress).get();
-            if(TextUtils.isEmpty(jsonData))
+            Toast.makeText(this, "Incorrect username or password!", Toast.LENGTH_SHORT).show();
+        }
+        else
+        {
+            if(checkInternetConnection(this))
             {
-                Toast.makeText(this, "Incorrect username or password!", Toast.LENGTH_SHORT).show();
+                String urlAddress = "https://codez.savonia.fi/jukka/project/user.php?Name="+uname+"&Password="+pword;
+                myASyncHandler = new MyASyncHandler(true,this);
+                try
+                {
+                    jsonData=myASyncHandler.execute("1",urlAddress).get();
+                    if(TextUtils.isEmpty(jsonData))
+                    {
+                        Toast.makeText(this, "Incorrect username or password!", Toast.LENGTH_SHORT).show();
+                    }
+                    else
+                    {
+                        currentUser = ParseJSON(jsonData);
+                        if(currentUser!=null)
+                        {
+                            saveCredentials();
+                            Toast.makeText(this, "Logged in!", Toast.LENGTH_SHORT).show();
+                            Intent intent = new Intent(this,MainActivity.class);
+                            startActivity(intent);
+                            finish();
+                        }
+                        else
+                        {
+                            Toast.makeText(this, "Incorrect username or password!", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                }
+                catch(Exception e)
+                {
+                    Toast.makeText(this, "Something went wrong!", Toast.LENGTH_SHORT).show();
+                }
             }
             else
             {
-                currentUser = ParseJSON(jsonData);
-                if(currentUser!=null)
-                {
-                    saveCredentials();
-                    Toast.makeText(this, "Logged in!", Toast.LENGTH_SHORT).show();
-                    Intent intent = new Intent(this,MainActivity.class);
-                    startActivity(intent);
-                    finish();
-                }
-                else
-                {
-                    Toast.makeText(this, "Incorrect username or password!", Toast.LENGTH_SHORT).show();
-                }
+                Toast.makeText(this, "There's no internet connection", Toast.LENGTH_SHORT).show();
             }
+
         }
-        catch(Exception e)
-        {
-            Toast.makeText(this, "Something went wrong!", Toast.LENGTH_SHORT).show();
-        }
+
     }
 
     private User ParseJSON(String json)

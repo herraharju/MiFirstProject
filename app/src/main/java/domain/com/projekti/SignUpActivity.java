@@ -45,20 +45,28 @@ public class SignUpActivity extends Base_Activity
                 }
                 else
                 {
-                    String urlAddress = "https://codez.savonia.fi/jukka/project/insertuser.php?Name="+uname+"&Password="+pword+"&Description="+desc;
-                    //my = new MyASyncHandler(true,context);
-                    try
+                    if(checkInternetConnection(context))
                     {
-                        new MyASyncHandler(true,context).execute("0", urlAddress).get();
-                        Toast.makeText(SignUpActivity.this, "Account was created!", Toast.LENGTH_SHORT).show();
+                        String urlAddress = "https://codez.savonia.fi/jukka/project/insertuser.php?Name="+uname+"&Password="+pword+"&Description="+desc;
+                        //my = new MyASyncHandler(true,context);
+                        try
+                        {
+                            new MyASyncHandler(true,context).execute("0", urlAddress).get();
+                            Toast.makeText(SignUpActivity.this, "Account was created!", Toast.LENGTH_SHORT).show();
+                        }
+                        catch(Exception e)
+                        {
+                            Log.d("Response: ", "> " + e.getMessage());
+                        }
+                        Intent intent = new Intent (getApplicationContext(),MainActivity.class);
+                        startActivity(intent);
+                        finish();
                     }
-                    catch(Exception e)
+                    else
                     {
-                        Log.d("Response: ", "> " + e.getMessage());
+                        Toast.makeText(context, "There's no internet connection", Toast.LENGTH_SHORT).show();
                     }
-                    Intent intent = new Intent (getApplicationContext(),MainActivity.class);
-                    startActivity(intent);
-                    finish();
+
                 }
             }
         });

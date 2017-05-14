@@ -268,7 +268,14 @@ public class MainActivity extends Base_Activity implements
 
                 try
                 {
-                    new MyASyncHandler(true, this).execute("1", m_urlAddress).get();
+                    if(checkInternetConnection(this))
+                    {
+                        new MyASyncHandler(true, this).execute("1", m_urlAddress).get();
+                    }
+                    else
+                    {
+                        Toast.makeText(this, "There's no internet connection", Toast.LENGTH_SHORT).show();
+                    }
                 }
                 catch (Exception e)
                 {
@@ -282,7 +289,15 @@ public class MainActivity extends Base_Activity implements
                     m_urlAddress = "https://codez.savonia.fi/jukka/project/reservetask.php?Id=" + id + "&UserId=" + userId;
                     try
                     {
-                        new MyASyncHandler(true, this).execute("1", m_urlAddress).get();
+                        if(checkInternetConnection(this))
+                        {
+                            new MyASyncHandler(true, this).execute("1", m_urlAddress).get();
+                        }
+                        else
+                        {
+                            Toast.makeText(this, "There's no internet connection", Toast.LENGTH_SHORT).show();
+                        }
+
                     }
                     catch (Exception e)
                     {
@@ -299,14 +314,23 @@ public class MainActivity extends Base_Activity implements
                 {
                     Toast.makeText(getApplicationContext(), "Start " + desc, Toast.LENGTH_SHORT).show();
                     m_urlAddress = "https://codez.savonia.fi/jukka/project/starttask.php?Id=" + id;
-                    try
+
+                    if(checkInternetConnection(this))
                     {
-                        new MyASyncHandler(true, this).execute("1", m_urlAddress).get();
+                        try
+                        {
+                            new MyASyncHandler(true, this).execute("1", m_urlAddress).get();
+                        }
+                        catch (Exception e)
+                        {
+                            e.printStackTrace();
+                        }
                     }
-                    catch (Exception e)
+                    else
                     {
-                        e.printStackTrace();
+                        Toast.makeText(this, "There's no internet connection", Toast.LENGTH_SHORT).show();
                     }
+
                 }
                 else if (!(tasks.get(index).Stop.equals("null")))
                 {
@@ -332,16 +356,25 @@ public class MainActivity extends Base_Activity implements
                 {
                     Toast.makeText(getApplicationContext(), "Stop " + desc, Toast.LENGTH_SHORT).show();
                     m_urlAddress = "https://codez.savonia.fi/jukka/project/stoptask.php?Id=" + id + "&Explanation=Stopped";
-                    try
+
+                    if(checkInternetConnection(this))
                     {
-                        new MyASyncHandler(true, this).execute("1", m_urlAddress).get();
-                    } catch (InterruptedException e)
-                    {
-                        e.printStackTrace();
-                    } catch (ExecutionException e)
-                    {
-                        e.printStackTrace();
+                        try
+                        {
+                            new MyASyncHandler(true, this).execute("1", m_urlAddress).get();
+                        } catch (InterruptedException e)
+                        {
+                            e.printStackTrace();
+                        } catch (ExecutionException e)
+                        {
+                            e.printStackTrace();
+                        }
                     }
+                    else
+                    {
+                        Toast.makeText(this, "There's no internet connection", Toast.LENGTH_SHORT).show();
+                    }
+
                 } else
                 {
                     Toast.makeText(this, "Task has already been stopped!", Toast.LENGTH_SHORT).show();
@@ -353,31 +386,65 @@ public class MainActivity extends Base_Activity implements
         getTasks();
         return true;
     }
-
+   //private void updateData()
+   //{
+   //    try
+   //    {
+   //        m_urlAddress = "https://codez.savonia.fi/jukka/project/UserAndFreeTasks.php?UserID=" + userId;
+   //        String json_tasks = new MyASyncHandler(true, this).execute("1", m_urlAddress).get();
+   //        if (!(json_tasks.equals("[]")) || !(json_tasks.isEmpty()))
+   //        {
+   //            tasks.clear();
+   //            tasks.addAll(ParseJSON(json_tasks));
+   //            adapter.notifyDataSetChanged();
+   //            //listView.setAdapter(adapter);
+   //            listView.setVisibility(View.VISIBLE);
+   //            m_tv_logged.setVisibility(View.GONE);
+   //        }
+   //        else
+   //        {
+   //            listView.setVisibility(View.GONE);
+   //            m_tv_logged.setVisibility(View.VISIBLE);
+   //            layoutTips.setVisibility(View.VISIBLE);
+   //        }
+   //    } catch (Exception e)
+   //    {
+   //        Log.d("Response: ", "> " + e.getMessage());
+   //    }
+   //}
     private void getTasks()
     {
-        try
+        if(checkInternetConnection(this))
         {
-            m_urlAddress = "https://codez.savonia.fi/jukka/project/UserAndFreeTasks.php?UserID=" + userId;
-            String json_tasks = new MyASyncHandler(true, this).execute("1", m_urlAddress).get();
-            if (!(json_tasks.equals("[]")) || !(json_tasks.isEmpty()))
-            {
-                tasks = ParseJSON(json_tasks);
-                adapter = new MyAdapter(MainActivity.this, tasks, userId);
-                listView.setAdapter(adapter);
-                listView.setVisibility(View.VISIBLE);
-                m_tv_logged.setVisibility(View.GONE);
+                try
+                {
+                m_urlAddress = "https://codez.savonia.fi/jukka/project/UserAndFreeTasks.php?UserID=" + userId;
+                String json_tasks = new MyASyncHandler(true, this).execute("1", m_urlAddress).get();
+                if (!(json_tasks.equals("[]")) || !(json_tasks.isEmpty()))
+                {
+                    tasks = ParseJSON(json_tasks);
+                    adapter = new MyAdapter(MainActivity.this, tasks, userId);
+                    listView.setAdapter(adapter);
+                    listView.setVisibility(View.VISIBLE);
+                    m_tv_logged.setVisibility(View.GONE);
+                }
+                else
+                {
+                    listView.setVisibility(View.GONE);
+                    m_tv_logged.setVisibility(View.VISIBLE);
+                    layoutTips.setVisibility(View.VISIBLE);
+                }
             }
-            else
+            catch (Exception e)
             {
-                listView.setVisibility(View.GONE);
-                m_tv_logged.setVisibility(View.VISIBLE);
-                layoutTips.setVisibility(View.VISIBLE);
+                Log.d("Response: ", "> " + e.getMessage());
             }
-        } catch (Exception e)
-        {
-            Log.d("Response: ", "> " + e.getMessage());
         }
+        else
+        {
+            Toast.makeText(this, "There's no internet connection", Toast.LENGTH_SHORT).show();
+        }
+
     }
 
     public void countDownTimer()
@@ -393,6 +460,7 @@ public class MainActivity extends Base_Activity implements
             @Override
             public void onFinish()
             {
+                //updateData();
                 getTasks();
                 countDownTimer();
             }
@@ -466,7 +534,8 @@ public class MainActivity extends Base_Activity implements
                 {
                     Toast.makeText(this, "Thanks, now you get information about tasks!", Toast.LENGTH_SHORT).show();
 
-                } else
+                }
+                else
                 {
                    //disable functionality about location based stuff
 
@@ -497,6 +566,7 @@ public class MainActivity extends Base_Activity implements
                     location.setLongitude(item.Lon);
                     if (checkAlertAboutTask(m_LastLocation, location))
                     {
+                        //notification
                         NotificationManager m_notifyMgr = (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
                         Notification m_Notification;
 
@@ -515,22 +585,24 @@ public class MainActivity extends Base_Activity implements
                         list.add(checkIfEmpty(item.Start));
                         list.add(checkIfEmpty(loginCredentials.getString(TAG_NAME, "")));
 
+                        //add data to intent
                         intent.putStringArrayListExtra("test", list);
-
-                        int requestID = (int) System.currentTimeMillis();
-                        PendingIntent contentIntent = PendingIntent.getActivity(this, requestID,
+                        PendingIntent contentIntent = PendingIntent.getActivity(this, item.ID,
                                 intent, 0);
 
                         //build notification
                         NotificationCompat.Builder builder = new NotificationCompat.Builder(this);
 
+                        //create builder for notification
                         m_Notification = builder.setContentIntent(contentIntent)
                                 .setSmallIcon(R.drawable.cast_ic_notification_small_icon)
                                 .setContentTitle("Task is near!")
                                 .setContentText("Task " + item.Description + " is near!")
+                                .setOnlyAlertOnce(true)
                                 .build();
 
-                        m_notifyMgr.notify(requestID, m_Notification);
+                        m_Notification.flags |= Notification.FLAG_ONLY_ALERT_ONCE | Notification.FLAG_AUTO_CANCEL;
+                        m_notifyMgr.notify(item.ID, m_Notification);
 
                     }
                 }
@@ -543,6 +615,7 @@ public class MainActivity extends Base_Activity implements
     {
         m_CurrentLocation = location;
         m_LastUpdateTime = DateFormat.getTimeInstance().format(new Date());
+        //updateData();
         getTasks();
     }
 

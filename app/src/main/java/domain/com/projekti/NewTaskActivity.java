@@ -100,26 +100,30 @@ public class NewTaskActivity
 
                 if(check)
                 {
-                    //create new task to db
-                    String urlAddress = "https://codez.savonia.fi/jukka/project/inserttask.php?Description="+descript+"&Lon="+lonVal+"&Lat="+latVal+"&Place="+place;
-                    try
+                    if(checkInternetConnection(this))
                     {
-                        new MyASyncHandler(false,getApplicationContext()).execute("0",urlAddress).get();
+                        //create new task to db
+                        String urlAddress = "https://codez.savonia.fi/jukka/project/inserttask.php?Description="+descript+"&Lon="+lonVal+"&Lat="+latVal+"&Place="+place;
+                        try
+                        {
+                            new MyASyncHandler(false,getApplicationContext()).execute("0",urlAddress).get();
+                        }
+                        catch (Exception e)
+                        {
+                            e.printStackTrace();
+                        }
+                        finally
+                        {
+                            Intent backToMain = new Intent(this,MainActivity.class);
+                            startActivity(backToMain);
+                            finish();
+                        }
                     }
-                    catch (InterruptedException e)
+                    else
                     {
-                        e.printStackTrace();
+                        Toast.makeText(this, "There's no internet connection", Toast.LENGTH_SHORT).show();
                     }
-                    catch (ExecutionException e)
-                    {
-                        e.printStackTrace();
-                    }
-                    finally
-                    {
-                        Intent backToMain = new Intent(this,MainActivity.class);
-                        startActivity(backToMain);
-                        finish();
-                    }
+
                 }
                 break;
             default:
