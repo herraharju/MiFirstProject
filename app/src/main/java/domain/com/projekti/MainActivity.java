@@ -475,7 +475,7 @@ public class MainActivity extends Base_Activity implements
             @Override
             public void onTick(long millisUntilFinished)
             {
-
+                //no use, needed to be implemented
             }
 
             @Override
@@ -502,36 +502,6 @@ public class MainActivity extends Base_Activity implements
         return result;
     }
 
-    @Override
-    protected void onStart()
-    {
-        if (loginCredentials.getBoolean(TAG_LOGGED, false))
-        {
-            m_GoogleApiClient.connect();
-        }
-        super.onStart();
-    }
-
-    @Override
-    protected void onStop()
-    {
-        if (m_GoogleApiClient != null)
-        {
-            m_GoogleApiClient.disconnect();
-        }
-
-        super.onStop();
-    }
-
-    @Override
-    public void onConnected(@Nullable Bundle bundle)
-    {
-        checkIfTasksNear();
-        if (m_RequestingLocationUpdates) {
-            startLocationUpdates();
-        }
-    }
-
     public String checkIfEmpty(String s)
     {
         if (s.isEmpty() || s.equals("null"))
@@ -540,28 +510,6 @@ public class MainActivity extends Base_Activity implements
         }
 
         return s;
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode,
-                                           String permissions[], int[] grantResults)
-    {
-        switch (requestCode)
-        {
-            case MY_PERMISSIONS_REQUEST_LOCATION:
-            {
-                // If request is cancelled, the result arrays are empty.
-                if (grantResults.length > 0
-                        && grantResults[0] == PackageManager.PERMISSION_GRANTED)
-                {
-                    Toast.makeText(this, "Now you get information about tasks!", Toast.LENGTH_SHORT).show();
-
-                }
-            }
-
-            // other 'case' lines to check for other
-            // permissions this app might request
-        }
     }
 
     private void checkIfTasksNear()
@@ -647,16 +595,6 @@ public class MainActivity extends Base_Activity implements
         }
     }
 
-    @Override
-    public void onLocationChanged(Location location)
-    {
-
-        m_CurrentLocation = location;
-        m_LastUpdateTime = DateFormat.getTimeInstance().format(new Date());
-        updateData();
-        //getTasks();
-    }
-
     protected void startLocationUpdates()
     {
         if (ActivityCompat.checkSelfPermission
@@ -668,21 +606,7 @@ public class MainActivity extends Base_Activity implements
         LocationServices.FusedLocationApi.requestLocationUpdates(
                 m_GoogleApiClient, m_LocationRequest,this);
     }
-    @Override
-    protected void onPause() {
-        super.onPause();
-        stopLocationUpdates();
-    }
 
-    private void stopLocationUpdates()
-    {
-        if(m_GoogleApiClient!=null && m_GoogleApiClient.isConnected())
-        {
-            LocationServices.FusedLocationApi.removeLocationUpdates(
-                    m_GoogleApiClient,this);
-        }
-
-    }
     private void AskPermissionsForLocation()
     {
         // Should we show an explanation?
@@ -701,6 +625,43 @@ public class MainActivity extends Base_Activity implements
                 MY_PERMISSIONS_REQUEST_LOCATION);
     }
 
+    private void stopLocationUpdates()
+    {
+        if(m_GoogleApiClient!=null && m_GoogleApiClient.isConnected())
+        {
+            LocationServices.FusedLocationApi.removeLocationUpdates(
+                    m_GoogleApiClient,this);
+        }
+
+    }
+
+    @Override
+    protected void onStart()
+    {
+        if (loginCredentials.getBoolean(TAG_LOGGED, false))
+        {
+            m_GoogleApiClient.connect();
+        }
+        super.onStart();
+    }
+
+    @Override
+    protected void onStop()
+    {
+        if (m_GoogleApiClient != null)
+        {
+            m_GoogleApiClient.disconnect();
+        }
+
+        super.onStop();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        stopLocationUpdates();
+    }
+
     @Override
     protected void onResume()
     {
@@ -713,23 +674,59 @@ public class MainActivity extends Base_Activity implements
             }
         }
     }
-    /*public void onSavedInstanceState(Bundle savedInstanceState)
-    {
-        savedInstanceState.putBoolean(REQUESTING_LOCATION_UPDATES_KEY,
-                m_RequestingLocationUpdates);
-        savedInstanceState.putParcelable(LOCATION_KEY, m_CurrentLocation);
-        savedInstanceState.putString(LAST_UPDATED_TIME_STRING_KEY, m_LastUpdateTime);
-        super.onSaveInstanceState(savedInstanceState);
-    }*/
 
     @Override
     public void onConnectionSuspended(int i)
     {
+        Toast.makeText(this, "Connection was suspended", Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult)
     {
+        Toast.makeText(this, "Connection failed", Toast.LENGTH_SHORT).show();
     }
+
+    @Override
+    public void onConnected(@Nullable Bundle bundle)
+    {
+        checkIfTasksNear();
+        if (m_RequestingLocationUpdates) {
+            startLocationUpdates();
+        }
+    }
+
+    @Override
+    public void onLocationChanged(Location location)
+    {
+
+        m_CurrentLocation = location;
+        m_LastUpdateTime = DateFormat.getTimeInstance().format(new Date());
+        updateData();
+        //getTasks();
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String permissions[], int[] grantResults)
+    {
+        switch (requestCode)
+        {
+            case MY_PERMISSIONS_REQUEST_LOCATION:
+            {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED)
+                {
+                    Toast.makeText(this, "Now you get information about tasks!", Toast.LENGTH_SHORT).show();
+
+                }
+            }
+
+            // other 'case' lines to check for other
+            // permissions this app might request
+        }
+    }
+
 
 }
