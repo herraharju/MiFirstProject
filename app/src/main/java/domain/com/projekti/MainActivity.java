@@ -585,8 +585,8 @@ public class MainActivity extends Base_Activity implements
 
                     if(settings.getBoolean("notifications_new_message_vibrate",false))
                     {
-                        vibration = new long[]{0, 500, 110, 500, 110, 450, 110, 200, 110, 170, 40, 450, 110, 200, 110, 170, 40, 500};
-//                        vibration = new long[]{350,300}; // 350 for delay to start with the ringtone sound, 300 for vibration time
+/*                        vibration = new long[]{0, 500, 110, 500, 110, 450, 110, 200, 110, 170, 40, 450, 110, 200, 110, 170, 40, 500};*/
+                        vibration = new long[]{350,300}; // 350 for delay to start with the ringtone sound, 300 for vibration time
                     }
 
                     if (checkAlertAboutTask(m_LastLocation, location) && settings.getBoolean("notifications_new_message",false))
