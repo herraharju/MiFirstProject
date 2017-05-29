@@ -19,7 +19,7 @@ import android.widget.Toast;
 /**
  * Created by MrKohvi on 10.4.2017.
  */
-
+//used for action bar create, gets
 public class Base_Activity extends AppCompatActivity implements TAGS
 {
     private SharedPreferences loginCredentials;

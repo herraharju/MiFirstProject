@@ -37,6 +37,7 @@ public class EditUserActivity extends AppCompatActivity implements TAGS
                 pword=et_pword.getText().toString();
                 cpword=et_cpword.getText().toString();
                 desc=et_desc.getText().toString();
+
                 //check if input is correct
                 if(pword.isEmpty()||cpword.isEmpty()||old_pword.isEmpty())
                 {

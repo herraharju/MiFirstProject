@@ -22,5 +22,6 @@ public interface TAGS
             LOCATION_KEY ="location-key",
             LAST_UPDATED_TIME_STRING_KEY = "last-updated-time-string-key";
     int MY_PERMISSIONS_REQUEST_LOCATION = 99;
+    int MY_PERMISSIONS_REQUEST_VIBRATION = 100;
 
 }

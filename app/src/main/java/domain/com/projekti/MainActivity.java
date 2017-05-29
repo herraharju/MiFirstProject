@@ -1,6 +1,7 @@
 package domain.com.projekti;
 
 import android.Manifest;
+import android.app.Dialog;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -9,6 +10,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Location;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.preference.PreferenceManager;
@@ -89,7 +91,7 @@ public class MainActivity extends Base_Activity implements
             // UI to show the correct latitude and longitude.
             if (savedInstanceState.keySet().contains(LOCATION_KEY)) {
                 // Since LOCATION_KEY was found in the Bundle, we can be sure that
-                // mCurrentLocationis not null.
+                // mCurrentLocation is not null.
                 m_CurrentLocation = savedInstanceState.getParcelable(LOCATION_KEY);
             }
 
@@ -98,6 +100,8 @@ public class MainActivity extends Base_Activity implements
                 m_LastUpdateTime = savedInstanceState.getString(
                         LAST_UPDATED_TIME_STRING_KEY);
             }
+
+            //get tasks via asynchandler
             getTasks();
         }
     }
@@ -109,7 +113,7 @@ public class MainActivity extends Base_Activity implements
         listView = (ListView) findViewById(R.id.myListView);
         registerForContextMenu(listView);
         listView.setLongClickable(true);
-        tasks = new <Task>ArrayList();
+        tasks = new ArrayList<Task>();
         layoutLoggedOut = (LinearLayout) findViewById(R.id.loggedOut);
         layoutLoggedIn = (LinearLayout) findViewById(R.id.loggedIn);
         layoutTips = (LinearLayout) findViewById(R.id.tipsLayout);
@@ -122,6 +126,7 @@ public class MainActivity extends Base_Activity implements
 
         loginCredentials = getSharedPreferences("domain.com.projekti.PREFERENCE_FILE_KEY", Context.MODE_PRIVATE);
         settings = PreferenceManager.getDefaultSharedPreferences(this);
+
         //set location request
         m_LocationRequest = new LocationRequest();
         m_LocationRequest.setInterval(Long.parseLong(settings.getString("sync_frequency", "10000")));
@@ -145,16 +150,16 @@ public class MainActivity extends Base_Activity implements
                         .addApi(LocationServices.API)
                         .build();
             }
-            //if logged in
+            //shows logged user name
             m_tv_loggedAs.setText("Logged as: " + loginCredentials.getString(TAG_NAME, ""));
 
             //get user id
             userId = loginCredentials.getInt(TAG_ID, -1);
 
-            //set listview before setting it visible
+            //get user tasks to listview before setting it visible
             getTasks();
 
-            //get user tasks and set layout components
+            //set layout components
             layoutLoggedIn.setVisibility(View.VISIBLE);
             layoutLoggedOut.setVisibility(View.GONE);
             layoutTips.setVisibility(View.VISIBLE);
@@ -171,7 +176,7 @@ public class MainActivity extends Base_Activity implements
 
     private ArrayList<Task> ParseJSON(String json)
     {
-        ArrayList<Task> tasks = new <Task>ArrayList();
+        ArrayList<Task> tasks = new ArrayList<Task>();
 
         if (json != null)
         {
@@ -244,6 +249,7 @@ public class MainActivity extends Base_Activity implements
         }
     }
 
+    //context menu creator
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo)
     {
@@ -251,45 +257,56 @@ public class MainActivity extends Base_Activity implements
         getMenuInflater().inflate(R.menu.popup_menu_task, menu);
     }
 
+    //context menu item selected
     @Override
     public boolean onContextItemSelected(MenuItem item)
     {
         AdapterContextMenuInfo info = (AdapterContextMenuInfo) item.getMenuInfo();
         int index = info.position;
         m_urlAddress = "";
-        String desc = tasks.get(index).Description;
-        int id = tasks.get(index).ID;
+        Task task = tasks.get(index);
+        String desc = task.Description;
+        int id = task.ID;
 
         switch (item.getItemId())
         {
             case R.id.task_delete:
-                Toast.makeText(getApplicationContext(), "Delete " + desc, Toast.LENGTH_SHORT).show();
-                m_urlAddress = "https://codez.savonia.fi/jukka/project/deletetask.php?Id=" + id;
+                if(task.UserID == userId)
+                {
+                    Toast.makeText(getApplicationContext(), "Deleted " + desc, Toast.LENGTH_SHORT).show();
+                    m_urlAddress = "https://codez.savonia.fi/jukka/project/deletetask.php?Id=" + id;
 
-                try
-                {
-                    if(checkInternetConnection(this))
-                    {
-                        new MyASyncHandler(true, this).execute("1", m_urlAddress).get();
-                    }
-                    else
-                    {
-                        Toast.makeText(this, "There's no internet connection", Toast.LENGTH_SHORT).show();
-                    }
-                }
-                catch (Exception e)
-                {
-                    e.printStackTrace();
-                }
-                break;
-            case R.id.task_reserve:
-                if (tasks.get(index).UserID == 0)
-                {
-                    Toast.makeText(getApplicationContext(), "Reserve " + desc, Toast.LENGTH_SHORT).show();
-                    m_urlAddress = "https://codez.savonia.fi/jukka/project/reservetask.php?Id=" + id + "&UserId=" + userId;
                     try
                     {
                         if(checkInternetConnection(this))
+                        {
+                            new MyASyncHandler(true, this).execute("1", m_urlAddress).get();
+                        }
+                        else
+                        {
+                            Toast.makeText(this, "There's no internet connection", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        e.printStackTrace();
+                    }
+                }
+                else
+                {
+                    Toast.makeText(this, "You can't delete free tasks!", Toast.LENGTH_SHORT).show();
+                }
+
+                break;
+
+            case R.id.task_reserve:
+                if (tasks.get(index).UserID == 0)
+                {
+                    Toast.makeText(getApplicationContext(), "Reserved " + desc, Toast.LENGTH_SHORT).show();
+                    m_urlAddress = "https://codez.savonia.fi/jukka/project/reservetask.php?Id=" + id + "&UserId=" + userId;
+                    try
+                    {
+                        if(checkInternetConnection(this) == true)
                         {
                             new MyASyncHandler(true, this).execute("1", m_urlAddress).get();
                         }
@@ -309,10 +326,11 @@ public class MainActivity extends Base_Activity implements
                     Toast.makeText(this, "Someone has already reserved this task!", Toast.LENGTH_SHORT).show();
                 }
                 break;
+
             case R.id.task_start:
                 if (tasks.get(index).Start.equals("null") && tasks.get(index).Stop.equals("null") && tasks.get(index).UserID > 0)
                 {
-                    Toast.makeText(getApplicationContext(), "Start " + desc, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "Started " + desc, Toast.LENGTH_SHORT).show();
                     m_urlAddress = "https://codez.savonia.fi/jukka/project/starttask.php?Id=" + id;
 
                     if(checkInternetConnection(this))
@@ -345,6 +363,7 @@ public class MainActivity extends Base_Activity implements
                     Toast.makeText(this, "You need to reserve task first", Toast.LENGTH_SHORT).show();
                 }
                 break;
+
             case R.id.task_stop:
                 if (tasks.get(index).Start.equals("null") && tasks.get(index).Stop.equals("null"))
                 {
@@ -354,7 +373,7 @@ public class MainActivity extends Base_Activity implements
                     Toast.makeText(this, "Task has already been stopped!", Toast.LENGTH_SHORT).show();
                 } else if (!(tasks.get(index).Start.equals("null")) && (tasks.get(index).Stop.equals("null")))
                 {
-                    Toast.makeText(getApplicationContext(), "Stop " + desc, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "Stopped " + desc, Toast.LENGTH_SHORT).show();
                     m_urlAddress = "https://codez.savonia.fi/jukka/project/stoptask.php?Id=" + id + "&Explanation=Stopped";
 
                     if(checkInternetConnection(this))
@@ -362,10 +381,7 @@ public class MainActivity extends Base_Activity implements
                         try
                         {
                             new MyASyncHandler(true, this).execute("1", m_urlAddress).get();
-                        } catch (InterruptedException e)
-                        {
-                            e.printStackTrace();
-                        } catch (ExecutionException e)
+                        } catch (Exception e)
                         {
                             e.printStackTrace();
                         }
@@ -383,35 +399,38 @@ public class MainActivity extends Base_Activity implements
             default:
                 break;
         }
-        getTasks();
+        updateData();
         return true;
     }
-   //private void updateData()
-   //{
-   //    try
-   //    {
-   //        m_urlAddress = "https://codez.savonia.fi/jukka/project/UserAndFreeTasks.php?UserID=" + userId;
-   //        String json_tasks = new MyASyncHandler(true, this).execute("1", m_urlAddress).get();
-   //        if (!(json_tasks.equals("[]")) || !(json_tasks.isEmpty()))
-   //        {
-   //            tasks.clear();
-   //            tasks.addAll(ParseJSON(json_tasks));
-   //            adapter.notifyDataSetChanged();
-   //            //listView.setAdapter(adapter);
-   //            listView.setVisibility(View.VISIBLE);
-   //            m_tv_logged.setVisibility(View.GONE);
-   //        }
-   //        else
-   //        {
-   //            listView.setVisibility(View.GONE);
-   //            m_tv_logged.setVisibility(View.VISIBLE);
-   //            layoutTips.setVisibility(View.VISIBLE);
-   //        }
-   //    } catch (Exception e)
-   //    {
-   //        Log.d("Response: ", "> " + e.getMessage());
-   //    }
-   //}
+
+
+   private void updateData()
+   {
+       //updates data for listview
+       try
+       {
+           m_urlAddress = "https://codez.savonia.fi/jukka/project/UserAndFreeTasks.php?UserID=" + userId;
+           String json_tasks = new MyASyncHandler(true, this).execute("1", m_urlAddress).get();
+           if (!(json_tasks.equals("[]")) || !(json_tasks.isEmpty()))
+           {
+               tasks.clear();
+               tasks.addAll(ParseJSON(json_tasks));
+               adapter.notifyDataSetChanged();
+               //listView.setAdapter(adapter);
+               listView.setVisibility(View.VISIBLE);
+               m_tv_logged.setVisibility(View.GONE);
+           }
+           else
+           {
+               listView.setVisibility(View.GONE);
+               m_tv_logged.setVisibility(View.VISIBLE);
+               layoutTips.setVisibility(View.VISIBLE);
+           }
+       } catch (Exception e)
+       {
+           Log.d("Response: ", "> " + e.getMessage());
+       }
+   }
     private void getTasks()
     {
         if(checkInternetConnection(this))
@@ -447,8 +466,10 @@ public class MainActivity extends Base_Activity implements
 
     }
 
+
     public void countDownTimer()
     {
+        //refresh for new and updated user tasks
         new CountDownTimer(Long.parseLong(settings.getString("sync_frequency", "10000")), 1000)
         {
             @Override
@@ -460,8 +481,8 @@ public class MainActivity extends Base_Activity implements
             @Override
             public void onFinish()
             {
-                //updateData();
-                getTasks();
+                updateData();
+                //getTasks();
                 countDownTimer();
             }
         }.start();
@@ -469,6 +490,7 @@ public class MainActivity extends Base_Activity implements
 
     public boolean checkAlertAboutTask(Location myLocation, Location taskLocation)
     {
+        //Checks if tasks are near user location
         boolean result = false;
         double alertDistance = Double.parseDouble(settings.getString("distance_alert", "100"));
 
@@ -532,12 +554,7 @@ public class MainActivity extends Base_Activity implements
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED)
                 {
-                    Toast.makeText(this, "Thanks, now you get information about tasks!", Toast.LENGTH_SHORT).show();
-
-                }
-                else
-                {
-                   //disable functionality about location based stuff
+                    Toast.makeText(this, "Now you get information about tasks!", Toast.LENGTH_SHORT).show();
 
                 }
             }
@@ -551,7 +568,7 @@ public class MainActivity extends Base_Activity implements
     {
         if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED)
         {
-            askPermissions();
+            AskPermissionsForLocation();
         }
         m_LastLocation = LocationServices.FusedLocationApi.getLastLocation(m_GoogleApiClient);
 
@@ -564,7 +581,15 @@ public class MainActivity extends Base_Activity implements
                     Location location = new Location("");
                     location.setLatitude(item.Lat);
                     location.setLongitude(item.Lon);
-                    if (checkAlertAboutTask(m_LastLocation, location))
+                    long[] vibration = new long[]{0};
+
+                    if(settings.getBoolean("notifications_new_message_vibrate",false))
+                    {
+                        vibration = new long[]{0, 500, 110, 500, 110, 450, 110, 200, 110, 170, 40, 450, 110, 200, 110, 170, 40, 500};
+//                        vibration = new long[]{350,300}; // 350 for delay to start with the ringtone sound, 300 for vibration time
+                    }
+
+                    if (checkAlertAboutTask(m_LastLocation, location) && settings.getBoolean("notifications_new_message",false))
                     {
                         //notification
                         NotificationManager m_notifyMgr = (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
@@ -575,7 +600,15 @@ public class MainActivity extends Base_Activity implements
 
                         //get data from task
                         ArrayList<String> list = new ArrayList<String>();
-                        list.add(checkIfEmpty(item.Description));
+                        if(item.UserID > 0)
+                        {
+                            list.add(checkIfEmpty(loginCredentials.getString(TAG_NAME, "")));
+                        }
+                        else
+                        {
+                            list.add("");
+                        }
+
                         list.add(checkIfEmpty(item.Description));
                         list.add(checkIfEmpty(item.Explanation));
                         list.add(checkIfEmpty("" + item.ID));
@@ -593,14 +626,18 @@ public class MainActivity extends Base_Activity implements
                         //build notification
                         NotificationCompat.Builder builder = new NotificationCompat.Builder(this);
 
+
                         //create builder for notification
                         m_Notification = builder.setContentIntent(contentIntent)
                                 .setSmallIcon(R.drawable.cast_ic_notification_small_icon)
                                 .setContentTitle("Task is near!")
                                 .setContentText("Task " + item.Description + " is near!")
                                 .setOnlyAlertOnce(true)
+                                .setVibrate(vibration)
+                                .setSound(Uri.parse(settings.getString("notifications_new_message_ringtone","")))
                                 .build();
 
+                        //set flags to alert only with 1 notification
                         m_Notification.flags |= Notification.FLAG_ONLY_ALERT_ONCE | Notification.FLAG_AUTO_CANCEL;
                         m_notifyMgr.notify(item.ID, m_Notification);
 
@@ -613,10 +650,11 @@ public class MainActivity extends Base_Activity implements
     @Override
     public void onLocationChanged(Location location)
     {
+
         m_CurrentLocation = location;
         m_LastUpdateTime = DateFormat.getTimeInstance().format(new Date());
-        //updateData();
-        getTasks();
+        updateData();
+        //getTasks();
     }
 
     protected void startLocationUpdates()
@@ -624,7 +662,7 @@ public class MainActivity extends Base_Activity implements
         if (ActivityCompat.checkSelfPermission
                 (this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED)
         {
-            askPermissions();
+            AskPermissionsForLocation();
             return;
         }
         LocationServices.FusedLocationApi.requestLocationUpdates(
@@ -645,23 +683,22 @@ public class MainActivity extends Base_Activity implements
         }
 
     }
-    private void askPermissions()
+    private void AskPermissionsForLocation()
     {
         // Should we show an explanation?
         if (ActivityCompat.shouldShowRequestPermissionRationale(this,
                 Manifest.permission.ACCESS_FINE_LOCATION))
         {
-
             // Show an explanation to the user *asynchronously* -- don't block
             // this thread waiting for the user's response! After the user
             // sees the explanation, try again to request the permission.
             Toast.makeText(this, "Sorry, tasks notifications are unavailable without gps", Toast.LENGTH_SHORT).show();
 
         }
+
         ActivityCompat.requestPermissions(this,
                 new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
                 MY_PERMISSIONS_REQUEST_LOCATION);
-
     }
 
     @Override
@@ -676,14 +713,14 @@ public class MainActivity extends Base_Activity implements
             }
         }
     }
-    public void onSavedInstanceState(Bundle savedInstanceState)
+    /*public void onSavedInstanceState(Bundle savedInstanceState)
     {
         savedInstanceState.putBoolean(REQUESTING_LOCATION_UPDATES_KEY,
                 m_RequestingLocationUpdates);
         savedInstanceState.putParcelable(LOCATION_KEY, m_CurrentLocation);
         savedInstanceState.putString(LAST_UPDATED_TIME_STRING_KEY, m_LastUpdateTime);
         super.onSaveInstanceState(savedInstanceState);
-    }
+    }*/
 
     @Override
     public void onConnectionSuspended(int i)
