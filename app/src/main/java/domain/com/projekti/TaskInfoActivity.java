@@ -8,6 +8,8 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
+
+//opens up after notification is clicked
 public class TaskInfoActivity extends AppCompatActivity implements TAGS
 {
     private TextView tv_user,tv_desc,tv_exp,tv_id,tv_place,tv_lat,tv_lon,tv_start;
@@ -24,6 +26,7 @@ public class TaskInfoActivity extends AppCompatActivity implements TAGS
 
         if(intent.hasExtra("test"))
         {
+            //set intent's data to textviews
             ArrayList<String> list =  intent.getExtras().getStringArrayList("test");
             tv_user.setText("User: "+list.get(0));
             tv_desc.setText("Description:" +list.get(1));

@@ -14,7 +14,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-
+//login activity
 public class SignInActivity extends Base_Activity implements TAGS
 {
     private EditText et_uname, et_pword;
@@ -89,6 +89,7 @@ public class SignInActivity extends Base_Activity implements TAGS
 
     }
 
+    //parse json data from server
     private User ParseJSON(String json)
     {
         if (json != null)
@@ -123,6 +124,8 @@ public class SignInActivity extends Base_Activity implements TAGS
             return null;
         }
     }
+
+    //save user information to preferences after successfull login
     private void saveCredentials()
     {
         SharedPreferences loginCredentials = getSharedPreferences("domain.com.projekti.PREFERENCE_FILE_KEY", Context.MODE_PRIVATE);

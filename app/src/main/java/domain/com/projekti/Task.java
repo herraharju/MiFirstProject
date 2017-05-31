@@ -3,6 +3,7 @@ package domain.com.projekti;
 /**
  * Created by MrKohvi on 14.4.2017.
  */
+//class for task
 
 public class Task
 {

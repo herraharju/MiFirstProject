@@ -12,9 +12,8 @@ import android.widget.Toast;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlacePicker;
 
-import java.util.concurrent.ExecutionException;
 
-
+//used to create new task --- uses google place picker to address task's location
 public class NewTaskActivity
         extends Base_Activity
         implements View.OnClickListener

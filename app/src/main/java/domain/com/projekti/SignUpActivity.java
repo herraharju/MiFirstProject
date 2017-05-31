@@ -10,7 +10,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 
-
+//sign up activity
 public class SignUpActivity extends Base_Activity
 {
     private EditText et_uname,et_pword,et_cpword,et_desc;

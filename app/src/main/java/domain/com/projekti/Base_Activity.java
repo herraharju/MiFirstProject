@@ -16,14 +16,13 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 
-/**
- * Created by MrKohvi on 10.4.2017.
- */
-//used for action bar create, gets
+//action bar activity and its functionality
+
 public class Base_Activity extends AppCompatActivity implements TAGS
 {
     private SharedPreferences loginCredentials;
     private MenuItem loginBtn,registerBtn,logoutBtn,newTaskBtn;
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu)
     {

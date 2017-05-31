@@ -1,7 +1,6 @@
 package domain.com.projekti;
 
 import android.Manifest;
-import android.app.Dialog;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -42,7 +41,6 @@ import org.json.JSONObject;
 import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.concurrent.ExecutionException;
 
 
 public class MainActivity extends Base_Activity implements
@@ -70,9 +68,16 @@ public class MainActivity extends Base_Activity implements
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        //initialize variables
         Init();
+
+
         checkIfLoggedIn();
+
         updateValuesFromBundle(savedInstanceState);
+
+        //start refresh counter
         countDownTimer();
     }
 
@@ -123,8 +128,10 @@ public class MainActivity extends Base_Activity implements
         m_LastLocation = null;
         m_CurrentLocation = null;
 
-
+        //get specified information about logged user to here
         loginCredentials = getSharedPreferences("domain.com.projekti.PREFERENCE_FILE_KEY", Context.MODE_PRIVATE);
+
+        //get settings information from preferences
         settings = PreferenceManager.getDefaultSharedPreferences(this);
 
         //set location request
@@ -178,6 +185,7 @@ public class MainActivity extends Base_Activity implements
     {
         ArrayList<Task> tasks = new ArrayList<Task>();
 
+        //got some json in here
         if (json != null)
         {
             try
@@ -220,6 +228,7 @@ public class MainActivity extends Base_Activity implements
                         task.Lon = Double.parseDouble(lon);
                     }
 
+                    //add rest of task information
                     task.ID = Integer.parseInt(id);
                     task.Start = start;
                     task.Stop = stop;
@@ -227,6 +236,7 @@ public class MainActivity extends Base_Activity implements
                     task.Description = description;
                     task.Place = place;
 
+                    //add userid from fetched data to this task
                     if (!(userid_task.equals("null")))
                     {
                         task.UserID = Integer.parseInt(userid_task);
@@ -249,7 +259,7 @@ public class MainActivity extends Base_Activity implements
         }
     }
 
-    //context menu creator
+    //context menu creator for listview
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo)
     {
@@ -257,7 +267,7 @@ public class MainActivity extends Base_Activity implements
         getMenuInflater().inflate(R.menu.popup_menu_task, menu);
     }
 
-    //context menu item selected
+    //context menu item selected on listview
     @Override
     public boolean onContextItemSelected(MenuItem item)
     {
@@ -271,6 +281,8 @@ public class MainActivity extends Base_Activity implements
         switch (item.getItemId())
         {
             case R.id.task_delete:
+
+                //delete task from server
                 if(task.UserID == userId)
                 {
                     Toast.makeText(getApplicationContext(), "Deleted " + desc, Toast.LENGTH_SHORT).show();
@@ -300,6 +312,8 @@ public class MainActivity extends Base_Activity implements
                 break;
 
             case R.id.task_reserve:
+
+                //reserve task from server to this user
                 if (tasks.get(index).UserID == 0)
                 {
                     Toast.makeText(getApplicationContext(), "Reserved " + desc, Toast.LENGTH_SHORT).show();
@@ -328,6 +342,8 @@ public class MainActivity extends Base_Activity implements
                 break;
 
             case R.id.task_start:
+
+                //add start time to task in server
                 if (tasks.get(index).Start.equals("null") && tasks.get(index).Stop.equals("null") && tasks.get(index).UserID > 0)
                 {
                     Toast.makeText(getApplicationContext(), "Started " + desc, Toast.LENGTH_SHORT).show();
@@ -365,6 +381,8 @@ public class MainActivity extends Base_Activity implements
                 break;
 
             case R.id.task_stop:
+
+                //add stop time to task in server
                 if (tasks.get(index).Start.equals("null") && tasks.get(index).Stop.equals("null"))
                 {
                     Toast.makeText(this, "Task is not even started yet", Toast.LENGTH_SHORT).show();
@@ -399,6 +417,8 @@ public class MainActivity extends Base_Activity implements
             default:
                 break;
         }
+
+        //notify listview that dataset has changed
         updateData();
         return true;
     }
@@ -406,7 +426,7 @@ public class MainActivity extends Base_Activity implements
 
    private void updateData()
    {
-       //updates data for listview
+       //updates data for listview to match the data in server
        try
        {
            m_urlAddress = "https://codez.savonia.fi/jukka/project/UserAndFreeTasks.php?UserID=" + userId;
@@ -433,6 +453,7 @@ public class MainActivity extends Base_Activity implements
    }
     private void getTasks()
     {
+        //fetch tasks from server when logged in and set layout by respond
         if(checkInternetConnection(this))
         {
                 try
@@ -514,6 +535,8 @@ public class MainActivity extends Base_Activity implements
 
     private void checkIfTasksNear()
     {
+
+        //check distance between task and current user location
         if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED)
         {
             AskPermissionsForLocation();
@@ -598,7 +621,9 @@ public class MainActivity extends Base_Activity implements
     protected void startLocationUpdates()
     {
         if (ActivityCompat.checkSelfPermission
-                (this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED)
+                (this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                        this,
+                        Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED)
         {
             AskPermissionsForLocation();
             return;

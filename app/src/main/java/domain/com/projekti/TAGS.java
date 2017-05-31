@@ -4,6 +4,8 @@ package domain.com.projekti;
  * Created by MrKohvi on 10.5.2017.
  */
 
+//tags used almost in every activity
+
 public interface TAGS
 {
     String  TAG_LOGGED = "LogStatus",

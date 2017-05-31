@@ -39,7 +39,7 @@ public class MyAdapter extends ArrayAdapter<Task> {
         TextView lat = (TextView) rowView.findViewById(R.id.tv_task_lat);
         TextView place = (TextView) rowView.findViewById(R.id.tv_task_place);
 
-        //check for task color set
+        //set task(item) color on listview
         if((!(getItem(position).Start.equals("null")))&&(!(getItem(position).Stop.equals("null"))))
         {
             rowView.setBackgroundColor(ContextCompat.getColor(context,R.color.GRAY));

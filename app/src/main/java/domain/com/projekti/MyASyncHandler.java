@@ -18,7 +18,7 @@ import okhttp3.Request;
 /**
  * Created by MrKohvi on 12.4.2017.
  */
-
+//executes all url based actions
 public class MyASyncHandler extends AsyncTask<String,Void,String>
 {
     public MyASyncHandler(boolean showProgressDialog,Context activityContext)
